@@ -1,10 +1,7 @@
 export enum ToastPosition {
     Top = "top",
-    Bottom = "bottom",
     TopLeft = "top_left",
     TopRight = "top_right",
-    BottomLeft = "bottom_left",
-    BottomRight = "bottom_right"
 };
 
 export enum ToastType {
@@ -13,3 +10,15 @@ export enum ToastType {
     Warning = "warning",
     Error = "error"
 }
+
+export interface ToastData {
+    content: string,
+    id?: number,
+    duration?: number,
+    type?: ToastType,
+    position?: ToastPosition,
+    delay?: number,
+    visible?: boolean,
+    dismissable?: boolean
+}
+

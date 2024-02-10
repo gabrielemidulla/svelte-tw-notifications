@@ -6,7 +6,7 @@ export function getToastIconColor(type: ToastType): string {
     let textWeight = '500';
     let textWeightDark = '200';
     let bgWeight = '100';
-    let bgWeightDark = '700';
+    let bgWeightDark = type != ToastType.Warning ? '800' : '700';
 
     switch (type) {
         case ToastType.Success:

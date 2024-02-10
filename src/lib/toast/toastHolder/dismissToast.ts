@@ -5,16 +5,10 @@ import type { ToastData } from "$lib/types";
 
 
 
-export function removeToast(id: number) {
+export function dismissToast(id: number | undefined) {
+    if (id == undefined) return;
     let readToastStore = get(toastStore);
-    let i = 0;
-
-    readToastStore.forEach((toast: ToastData) => {
-        if (toast.id == id) {
-            readToastStore.splice(i, 1);
-        }
-        i++;
-    });
-
+    const idx = readToastStore.findIndex(t => t.id == id);
+    readToastStore[idx].visible = false;
     toastStore.set(readToastStore);
 }

@@ -1,28 +1,26 @@
-import { ToastPosition, ToastType } from "$lib/types";
+import type { ToastData } from "$lib/types";
 import Toast from "$lib/components/Toast/Toast.svelte";
 import { toastStore } from "$lib/toast/toastStore";
 import { get } from "svelte/store";
 
 
-export function addToast(content: string, type: ToastType = ToastType.Plain, position: ToastPosition = ToastPosition.Top, duration: number = -1) {
-    const toastHolder: HTMLElement | null = document.getElementById("toastHolder");
-    if (!toastHolder) return;
-
+export async function addToast(data: ToastData) {
+    data.visible = false;
     let newToastStore = get(toastStore);
+    newToastStore = [...newToastStore, data];
+    const delay = Math.max(1, newToastStore.filter(t => !t.visible).length) * 250;
 
-    const newToast: Toast = new Toast({
-        props: {
-            content: content,
-            type: type,
-            position: position,
-            id: newToastStore.length,
-            duration: duration
-        },
-
-        target: toastHolder
-    });
-
-    newToastStore = [...newToastStore, newToast];
     toastStore.set(newToastStore);
-    return newToast;
+
+    if (data.delay == undefined) data.delay = delay;
+    if (data.delay != undefined)
+        await new Promise((r) => setTimeout(r, data.delay));
+    data.visible = true;
+
+
+    if (data.id == undefined) data.id = newToastStore.length;
+    newToastStore[newToastStore.length - 1] = data;
+    toastStore.set(newToastStore);
+
+    return data;
 }
